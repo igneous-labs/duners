@@ -81,9 +81,14 @@ impl DuneClient {
     /// Deserializes Responses into appropriate type.
     /// Some "invalid" requests return response JSON, which are parsed and returned as Errors.
     async fn _parse_response<T: DeserializeOwned>(resp: Response) -> Result<T, DuneRequestError> {
-        if resp.status().is_success() {
+        let is_success = resp.status().is_success();
+        //let s = resp.text().await?;
+        //info!("{s}");
+        if is_success {
+            //serde_json::from_str(&s).map_err(|e| DuneRequestError::Request(e.to_string()))
             resp.json::<T>().await.map_err(DuneRequestError::from)
         } else {
+            //let err: DuneError = serde_json::from_str(&s).map_err(|e| DuneRequestError::Request(e.to_string()))?;
             let err = resp
                 .json::<DuneError>()
                 .await
@@ -308,7 +313,8 @@ mod tests {
         assert!(rows[0].max_price > 4148.0)
     }
 
-    #[tokio::test]
+    #[test_log::test(tokio::test)]
+    //#[tokio::test]
     async fn refresh() {
         let dune = DuneClient::from_env();
 
