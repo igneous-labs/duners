@@ -26,7 +26,7 @@ impl From<DuneError> for DuneRequestError {
 
 impl From<reqwest::Error> for DuneRequestError {
     fn from(value: reqwest::Error) -> Self {
-        DuneRequestError::Request(value.to_string())
+        DuneRequestError::Request(format!("{value:?}"))
     }
 }
 
