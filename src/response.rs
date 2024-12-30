@@ -108,7 +108,8 @@ pub struct GetStatusResponse {
     pub times: ExecutionTimes,
     /// If the query state is Pending,
     /// then there will be an associated integer indicating queue position.
-    pub queue_position: Option<u32>,
+    /// TODO: confirm - API sometimes returns -1 instead of null
+    pub queue_position: Option<i64>,
     /// This field will be non-empty once query execution has completed.
     pub result_metadata: Option<ResultMetaData>,
 }
